@@ -32,7 +32,7 @@ jobs:
           hero_actions = (f'<div class="runner-hero-actions">{hero_video}'
                           f'<a class="runner-pdf-hero-link" href="{pdf}" target="_blank" rel="noopener noreferrer">기획서 PDF 보기 ↗</a></div>')
           css_anchor = '.runner-video-hero-link:hover{background:#185f8d}'
-          bottom_pattern = (r'<div class="runner-links" style="margin-top:24px">\\s*'
+          bottom_pattern = (r'<div class="runner-links" style="margin-top:24px">\s*'
                             + re.escape(f'<a href="{video}"')
                             + r'.*?' + re.escape(f'<a href="{pdf}"')
                             + r'.*?</div>')
@@ -45,7 +45,7 @@ jobs:
               updated, bottom_count = re.subn(bottom_pattern, '', original, flags=re.DOTALL)
               assert bottom_count==1, f'{name}: bottom two-button block count {bottom_count}'
               updated = updated.replace(hero_video, hero_actions, 1)
-              updated = updated.replace(css_anchor, css_anchor + '\\n' + css, 1)
+              updated = updated.replace(css_anchor, css_anchor + '\n' + css, 1)
               assert updated.count('class="runner-hero-actions"')==1
               assert updated.count('class="runner-pdf-hero-link"')==1
               assert updated.count(f'href="{pdf}"')==1
