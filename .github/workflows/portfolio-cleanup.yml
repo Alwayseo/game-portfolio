@@ -1,6 +1,8 @@
 name: Portfolio Cleanup
 on:
-  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/portfolio-cleanup.yml'
 jobs:
   cleanup:
     runs-on: ubuntu-latest
@@ -8,13 +10,13 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Remove placeholder project and preview button
+      - name: Inspect exact HTML markup
         run: |
           python - <<'PY'
           from pathlib import Path
-          from html.parser import HTMLParser
           s=Path('index.html').read_text(encoding='utf-8')
           for term in ['PROJECT 03','구성 미리보기']:
               i=s.find(term)
-              print(term,i,s[max(0,i-400):i+400])
+              print('MARKER',term,'INDEX',i)
+              print(s[max(0,i-2000):i+2500])
           PY
