@@ -795,7 +795,7 @@ html{overflow-x:clip}
   <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0"><a class="runner-card-video-link" href="https://youtu.be/4WmyT-zsGJE" target="_blank" rel="noopener noreferrer" aria-label="오늘도 무사히 전체 플레이 영상을 유튜브에서 보기">▶ 영상 보기 ↗</a><button type="button" class="case-preview-btn runner-open" data-runner aria-label="오늘도 무사히 프로젝트 상세 내용 열기">상세 보기 <span aria-hidden="true">↗</span></button></div></div>
 </article>
 </div>
-<p class="project-footnote reveal">✧ 5인 팀 프로젝트 · Stage A 레벨/퀘스트/이벤트·보스 콘셉트 기획</p>
+
 </div>
 </section>
 <section aria-labelledby="process-title" class="section process-section" id="process">
@@ -818,7 +818,7 @@ html{overflow-x:clip}
 <section aria-labelledby="contact-title" class="contact-section" id="contact">
 <span aria-hidden="true" class="contact-cloud cc-one"></span><span aria-hidden="true" class="contact-cloud cc-two"></span>
 <div class="container contact-inner reveal"><span class="section-index">05 — SAY HELLO</span><div class="contact-sparkle">✦</div><h2 id="contact-title">게임에 대한 생각을<br/><em>함께 나누고 싶습니다.</em></h2><p>프로젝트 및 채용 관련 문의는 이메일로 부탁드립니다.</p><div class="contact-footer-action contact-links">
-<a class="contact-method" href="mailto:kj1301975@naver.com"><span class="contact-method-icon">✉</span><span><small>E-MAIL</small><strong>kj1301975@naver.com</strong></span><b aria-hidden="true">↗</b></a>
+<button class="contact-method" id="copy-contact-email" type="button" title="이메일 주소 복사" aria-label="kj1301975@naver.com 이메일 주소 복사"><span class="contact-method-icon">✉</span><span><small id="contact-copy-feedback" aria-live="polite">E-MAIL</small><strong>kj1301975@naver.com</strong></span><b aria-hidden="true" id="contact-copy-icon">⧉</b></button>
 </div><a class="contact-top contact-top-new" href="#top">맨 위로 올라가기 ↑</a></div>
 </section>
 </main>
@@ -1192,5 +1192,55 @@ v.play().catch(()=>{});
 })();
 </script>
 
+<style id="contact-copy-style">#copy-contact-email{font:inherit;cursor:pointer;text-align:left;appearance:none}#copy-contact-email:focus-visible{outline:3px solid #257ab9;outline-offset:4px}#contact-copy-feedback{transition:color .18s}#copy-contact-email.is-copied #contact-copy-feedback{color:#15806b}#copy-contact-email.is-copied #contact-copy-icon{color:#15806b}</style>
+<script id="contact-copy-behavior">
+(() => {
+  const button = document.getElementById('copy-contact-email');
+  const feedback = document.getElementById('contact-copy-feedback');
+  const icon = document.getElementById('contact-copy-icon');
+  if (!button || !feedback || !icon) return;
+  const email = 'kj1301975@naver.com';
+  let resetTimer;
+  const copyFallback = () => {
+    const temporary = document.createElement('textarea');
+    temporary.value = email;
+    temporary.setAttribute('readonly', '');
+    temporary.style.position = 'fixed';
+    temporary.style.opacity = '0';
+    document.body.appendChild(temporary);
+    temporary.select();
+    const succeeded = document.execCommand('copy');
+    temporary.remove();
+    if (!succeeded) throw new Error('Clipboard copy failed');
+  };
+  button.addEventListener('click', async () => {
+    clearTimeout(resetTimer);
+    let succeeded = false;
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(email);
+      } else {
+        copyFallback();
+      }
+      succeeded = true;
+    } catch (error) {
+      try {
+        copyFallback();
+        succeeded = true;
+      } catch (fallbackError) {
+        succeeded = false;
+      }
+    }
+    button.classList.toggle('is-copied', succeeded);
+    feedback.textContent = succeeded ? '복사됨 ✓' : '복사 실패';
+    icon.textContent = succeeded ? '✓' : '⧉';
+    resetTimer = window.setTimeout(() => {
+      button.classList.remove('is-copied');
+      feedback.textContent = 'E-MAIL';
+      icon.textContent = '⧉';
+    }, 2500);
+  });
+})();
+</script>
 </body>
 </html>
