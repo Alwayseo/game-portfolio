@@ -1,0 +1,25 @@
+name: Inspect Roblox portfolio PDF link
+on:
+  push:
+    paths:
+      - '.github/workflows/inspect-roblox-pdf.yml'
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Print PDF link contexts
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re,html
+          s=Path('index.html').read_text(encoding='utf-8')
+          print('LENGTH',len(s),'total lines',s.count('\\n')+1)
+          for term in ['Let_Me_Escape_from_Bloxity', '기획서 보기', '기획서', 'pdf', 'download', 'target="_blank"','onclick']:
+            print('TERM',repr(term))
+            for m in list(re.finditer(re.escape(term),s,re.IGNORECASE))[:15]:
+              print('OFFSET',m.start(),'CONTEXT',repr(s[max(0,m.start()-250):m.end()+300]))
+          PY
