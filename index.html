@@ -1187,5 +1187,25 @@ v.play().catch(()=>{});
 })();
 </script>
 
+<!-- portfolio-2026-cleanup -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const normalized = el => (el.textContent || '').replace(/\s+/g, ' ').trim();
+  document.querySelectorAll('a, button').forEach(el => {
+    if (normalized(el).includes('구성 미리보기')) el.remove();
+  });
+  const candidates = [...document.querySelectorAll('article, li, div')].filter(el =>
+    normalized(el).includes('PROJECT 03') &&
+    !normalized(el).includes('PROJECT 02') &&
+    !normalized(el).includes('PROJECT 01')
+  );
+  const matches = candidates.filter(el => !el.parentElement ||
+    normalized(el.parentElement).includes('PROJECT 02') ||
+    normalized(el.parentElement).includes('PROJECT 01'));
+  const card = matches.sort((a,b)=>normalized(a).length-normalized(b).length)[0] ||
+    candidates.sort((a,b)=>normalized(b).length-normalized(a).length)[0];
+  if (card) card.remove();
+});
+</script>
 </body>
 </html>
