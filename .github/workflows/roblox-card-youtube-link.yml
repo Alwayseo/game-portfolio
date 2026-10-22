@@ -1,0 +1,25 @@
+name: Roblox card video link
+on:
+  push:
+    paths: ['.github/workflows/roblox-card-youtube-link.yml']
+permissions:
+  contents: write
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect Roblox card button markup
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('index.html').read_text(encoding='utf-8')
+          print('INDEX length',len(s))
+          for term in ['runner-card-video-link','상세 보기','THuuQ30fbc8','Let Me Escape from Bloxity','exit4-open','exit4-card','project-card','featured-card']:
+              matches=list(re.finditer(re.escape(term),s,re.IGNORECASE))
+              print('TERM',repr(term),'TOTAL',len(matches))
+              for m in matches[:12]:
+                  print('OFFSET',m.start(),'CONTEXT',repr(s[max(0,m.start()-500):min(len(s),m.end()+600)]))
+          PY
