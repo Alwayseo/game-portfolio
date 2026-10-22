@@ -1,25 +1,42 @@
-name: Roblox card video link
+name: Add Roblox video link above details button
 on:
   push:
     paths: ['.github/workflows/roblox-card-youtube-link.yml']
 permissions:
   contents: write
 jobs:
-  inspect:
+  add-video-link:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Inspect Roblox card button markup
+      - name: Add YouTube link to the Roblox project card
         shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          import re
-          s=Path('index.html').read_text(encoding='utf-8')
-          print('INDEX length',len(s))
-          for term in ['runner-card-video-link','상세 보기','THuuQ30fbc8','Let Me Escape from Bloxity','exit4-open','exit4-card','project-card','featured-card']:
-              matches=list(re.finditer(re.escape(term),s,re.IGNORECASE))
-              print('TERM',repr(term),'TOTAL',len(matches))
-              for m in matches[:12]:
-                  print('OFFSET',m.start(),'CONTEXT',repr(s[max(0,m.start()-500):min(len(s),m.end()+600)]))
+          html = Path('index.html')
+          original=html.read_text(encoding='utf-8')
+          old='<button aria-label="Let Me Escape from Bloxity 프로젝트 상세 내용 열기" class="case-preview-btn real-project-btn" data-exit4="" type="button">상세 보기 <span aria-hidden="true">↗</span></button>'
+          link='<a class="runner-card-video-link" href="https://youtu.be/THuuQ30fbc8" target="_blank" rel="noopener noreferrer" aria-label="로블록스 Stage A 전체 플레이 영상을 유튜브에서 보기">▶ 영상 보기 ↗</a>'
+          new='<div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0">'+link+old+'</div>'
+          assert original.count(old)==1, f'Roblox button expected once, saw {original.count(old)}'
+          assert original.count(link)==0, 'Link already in Roblox card'
+          assert '.runner-card-video-link{' in original, 'Original video link style missing'
+          result=original.replace(old,new,1)
+          assert result.count(old)==1
+          assert result.count(link)==1
+          assert result.count('https://youtu.be/4WmyT-zsGJE')==original.count('https://youtu.be/4WmyT-zsGJE'), 'Other project changed'
+          html.write_text(result,encoding='utf-8')
+          print('SUCCESS: Roblox Stage A video button placed above details button')
+          print('New card fragment:',new)
+          print('Unrelated content unchanged')
           PY
+      - name: Commit single HTML update
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- index.html
+          git diff --cached --stat
+          git commit -m "Add Stage A video link above Roblox project details"
+          git push
