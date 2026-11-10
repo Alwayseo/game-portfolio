@@ -27,3 +27,5 @@ body .real-project .project-summary h3 small{color:#425f74;font-size:18px}
 body .project-card .project-inline-tags span.is-filter-match{background:#153e5b;color:#fff;border:1px solid #153e5b;box-shadow:0 0 0 2px #d0e3f0;font-weight:850;text-decoration:underline;text-underline-offset:3px}
 @media(max-width:760px){.project-actions{width:100%;gap:8px;flex-wrap:nowrap}.project-actions>a,.project-actions>button{justify-content:center;padding:12px 14px;font-size:16px;min-width:0}.project-actions .case-preview-btn{gap:10px}}
 @media(max-width:360px){.project-actions>a,.project-actions>button{padding:10px;font-size:14px}.project-actions .case-preview-btn{gap:6px}}
+
+@media(max-width:760px){.runner-project-card .project-actions{flex-wrap:wrap}.runner-devlog-link{flex-basis:auto}}
