@@ -1,12 +1,14 @@
 (() => {
  const filters=[...document.querySelectorAll('[data-filter]')];
  const cards=[...document.querySelectorAll('.project-card[data-tags]')];
- const match={system:['System'],level:['Level','Level Design'],quest:['Quest Design'],content:['Content','Event Flow']};
+ const match={unity:['Unity'],roblox:['Roblox'],system:['System'],level:['Level','Level Design'],quest:['Quest Design'],content:['Content','Event Flow']};
+ cards.forEach(card=>{const engine=card.dataset.tags.includes('unity')?'Unity':'Roblox';const badge=document.createElement('span');badge.textContent=engine;card.querySelector('.project-inline-tags')?.prepend(badge)});
  filters.forEach(button=>button.addEventListener('click',()=>{
-  const tag=button.dataset.filter;
-  filters.forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
+  const tag=button.dataset.filter!=='all'&&button.getAttribute('aria-pressed')==='true'?'all':button.dataset.filter;
+  const selected=filters.find(b=>b.dataset.filter===tag);
+  filters.forEach(b=>b.setAttribute('aria-pressed',String(b===selected)));
   cards.forEach(card=>{card.hidden=tag!=='all'&&!card.dataset.tags.split(' ').includes(tag);card.classList.add('is-visible');card.querySelectorAll('.project-inline-tags span').forEach(t=>t.classList.toggle('is-filter-match',(match[tag]||[]).includes(t.textContent.trim())))});
-  document.querySelector('.filter-status').textContent=`${button.textContent} 프로젝트 ${cards.filter(c=>!c.hidden).length}개`;
+  document.querySelector('.filter-status').textContent=`${selected.textContent} 프로젝트 ${cards.filter(c=>!c.hidden).length}개`;
  }));
  const nav=[...document.querySelectorAll('.desktop-nav a,.mobile-menu a,.nav-contact')];
  const sections=[...document.querySelectorAll('main>section[id]')];
