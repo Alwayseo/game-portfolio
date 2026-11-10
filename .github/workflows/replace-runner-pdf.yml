@@ -1,0 +1,29 @@
+name: Replace verified Today Safely PDF
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/replace-runner-pdf.yml']
+permissions:
+  contents: write
+jobs:
+  replace:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download and verify the requested PDF
+        shell: python
+        run: |
+          import hashlib, pathlib, urllib.request
+          url = "https://drive.usercontent.google.com/download?id=1NPUWgtzTGZxYnO1bMEywY7dMFnLo0ZYj&export=download"
+          data = urllib.request.urlopen(url, timeout=120).read()
+          assert data.startswith(b"%PDF-")
+          assert len(data) == 30352184
+          assert hashlib.sha256(data).hexdigest() == "68974a3e0814db8e80866ad2176c0ea500baaa9ae7356894b55c6ee9e65b05a3"
+          pathlib.Path("오늘도무사히_기획포트폴리오(서예종).pdf").write_bytes(data)
+      - name: Commit only the verified PDF
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- "오늘도무사히_기획포트폴리오(서예종).pdf"
+          git commit -m "Replace Today Safely portfolio with verified 55-page PDF"
+          git push origin HEAD:main
