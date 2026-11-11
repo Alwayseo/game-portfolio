@@ -1,0 +1,42 @@
+name: Publish Today Safely proposal once
+on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/publish-today-safely-once.yml"]
+permissions:
+  contents: write
+concurrency:
+  group: publish-today-safely-once
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download and verify the approved 72-page proposal
+        shell: bash
+        run: |
+          set -euo pipefail
+          target='오늘도무사히_기획포트폴리오(서예종).pdf'
+          curl --fail --location --retry 2 --max-time 180 'https://drive.google.com/uc?export=download&id=1FlxFx0gtKHxE_pT_sopo6FTw-jrwPZ0x' --output "$target"
+          echo 'e15f1d5feb3a6eb57aba81cb2f7518a65f37374c9eac02849f90834faa631b9e  오늘도무사히_기획포트폴리오(서예종).pdf' | sha256sum -c -
+          test "$(stat -c%s "$target")" = 41209914
+      - name: Apply the reviewed changes and clean up this one-time workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '796451d38f7efe71e5d47ca89c1483bd3ad679e2188437dee95978b7dfe82e8e  index.html' | sha256sum -c -
+          echo 'b0293e3d7903169a4bf83d0180e0d2c9ca31698c7aef56abf94c89f6ee3cdffe  today-safely.html' | sha256sum -c -
+          echo '7a0978cb5c5087a945b7e10d1b50e6ba661e34899ab592abdafd2bde29e30032  assets/readability.js' | sha256sum -c -
+          echo '480161951828e503e110015aedf7274c1af83c10b8431b352e6528a6eff0ee41  .portfolio-upload-20261111/site.patch' | sha256sum -c -
+          git apply --check --unidiff-zero .portfolio-upload-20261111/site.patch
+          git apply --unidiff-zero .portfolio-upload-20261111/site.patch
+          node --check assets/readability.js
+          git rm -r .portfolio-upload-20261111
+          git rm .github/workflows/publish-today-safely-once.yml
+          git add index.html today-safely.html assets/readability.js assets/today-safely/ '오늘도무사히_기획포트폴리오(서예종).pdf'
+          git diff --cached --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Apply the 72-page Today Safely proposal and remove one-time upload files'
+          git push origin HEAD:main
