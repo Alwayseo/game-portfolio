@@ -1,0 +1,48 @@
+name: Remove requested detail note once
+on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/remove-detail-note-once.yml"]
+permissions:
+  contents: write
+concurrency:
+  group: remove-detail-note-once
+  cancel-in-progress: false
+jobs:
+  edit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Remove only the two elements shown in the user's screenshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from hashlib import sha256
+          targets = {
+            'index.html': ('aad6cd7301176464bbdee69513314bba1c0931812bc693b9e90456b056a77b0e', 'ca44a311730349451e041ff17d5bc5035fd2bf4048681932940605a6dcdf8ee5'),
+            'today-safely.html': ('bdffa3ad38170a4289a8fa0de580f9b28c0b806bd4d6d15dfb3d20507b6ab590', '38ef4588f999bdf66c5aec817e1c771fb586c7fed91bd29825a925f90a54ca79'),
+          }
+          remove = [
+            '<p class="runner-source-note">기획서 p. 17, 19, 21, 34, 69–70</p>',
+            '<div class="runner-note">72쪽 기획서의 규칙과 실제 화면을 바탕으로 정리했습니다. 위 설명은 설계 의도와 직접 플레이 확인 내용이며, 별도 사용자 테스트의 검증 성과를 뜻하지 않습니다.</div>',
+          ]
+          for filename, (before, after) in targets.items():
+              path = Path(filename)
+              assert sha256(path.read_bytes()).hexdigest() == before, filename
+              content = path.read_text()
+              for part in remove:
+                  assert content.count(part) == 1, (filename, part)
+                  content = content.replace(part, '')
+              path.write_text(content)
+              assert sha256(path.read_bytes()).hexdigest() == after, filename
+          PY
+          git rm .github/workflows/remove-detail-note-once.yml
+          git add index.html today-safely.html
+          git diff --cached --check
+          test "$(git write-tree)" = 120f786183697bcfa55ca08edd97f780ad6a7286
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Remove the requested source line and explanatory note from Today Safely details'
+          git push origin HEAD:main
