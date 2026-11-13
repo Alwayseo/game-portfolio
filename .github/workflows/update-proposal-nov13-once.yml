@@ -1,0 +1,41 @@
+name: Update Today Safely proposal once
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/update-proposal-nov13-once.yml']
+permissions:
+  contents: write
+concurrency:
+  group: update-proposal-nov13-once
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download and verify approved proposal
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 2 --max-time 180 'https://drive.google.com/uc?export=download&id=1eylY8iP_lsUviY4IsOFD_7Ua6gcEI-__' --output '오늘도무사히_기획포트폴리오(서예종).pdf'
+          echo '66cee1d75a0191af9543b4d38068e73e3e4a987177e350b0399f98663c369329  오늘도무사히_기획포트폴리오(서예종).pdf' | sha256sum -c -
+          test "$(stat -c%s '오늘도무사히_기획포트폴리오(서예종).pdf')" = 24494746
+      - name: Apply reviewed content and remove temporary files
+        run: |
+          set -euo pipefail
+          echo 'ca44a311730349451e041ff17d5bc5035fd2bf4048681932940605a6dcdf8ee5  index.html' | sha256sum -c -
+          echo '38ef4588f999bdf66c5aec817e1c771fb586c7fed91bd29825a925f90a54ca79  today-safely.html' | sha256sum -c -
+          echo '4d0ebc4f4017fc4e534b0985bc83a6ec6f8805a6bb4f3825c6457fb82e9d7097  assets/readability.js' | sha256sum -c -
+          base64 -d .portfolio-nov13.patch.gz.b64 | gzip -d > /tmp/portfolio.patch
+          git apply --check --unidiff-zero /tmp/portfolio.patch
+          git apply --unidiff-zero /tmp/portfolio.patch
+          echo 'fa21dbd8e974f0874a248b5556863b9303db13b719b35347b02793b16635a62f  index.html' | sha256sum -c -
+          echo '3bc2ffd5b2de6463150c816e4b6d191cd603f88fdc77e01d2ed5fc2762e2decc  today-safely.html' | sha256sum -c -
+          echo 'bffaf922c1ca7351a9ed7019fe40271d0c944411bba31af38a19080e365c85e3  assets/readability.js' | sha256sum -c -
+          node --check assets/readability.js
+          git rm .portfolio-nov13.patch.gz.b64 .github/workflows/update-proposal-nov13-once.yml
+          git add index.html today-safely.html assets/readability.js '오늘도무사히_기획포트폴리오(서예종).pdf'
+          git diff --cached --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Update Today Safely to the revised 51-page proposal and aligned case study'
+          git push origin HEAD:main
