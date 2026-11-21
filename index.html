@@ -661,6 +661,16 @@ html{overflow-x:clip}
 @media(max-width:560px){.runner-video-showcase{margin:13px 16px 0;padding:13px}.runner-video-heading h3{font-size:20px}}
 </style>
 <link rel="stylesheet" href="assets/readability.css?v=20261111-detail"/><link rel="stylesheet" href="assets/alwayseo-theme.css?v=20261111-clear"/>
+<style id="hero-profile-actions">
+#home .hero-actions{display:grid;grid-template-columns:max-content max-content;align-items:center;justify-content:start;column-gap:14px;row-gap:8px}
+#home .hero-actions .text-button{grid-column:1;justify-self:start;min-height:44px}
+#home .hero-profile-link{display:inline-flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;box-sizing:border-box;padding:12px 17px;border:1px solid #8dc4e5;border-radius:999px;background:#f2faff;color:#185a92;font-size:16px;font-weight:850;line-height:1.5;white-space:nowrap}
+#home .hero-profile-link:hover{background:#e5f6ff}
+@media(max-width:400px){
+#home .hero-actions{column-gap:8px}
+#home .hero-actions .primary-button,#home .hero-profile-link{gap:7px;padding-inline:11px;font-size:14px}
+}
+</style>
 <style id="bloxity-pdf-contrast">
 #exit4-dialog a.exit4-pdf{color:var(--accent-deep,#185a92)!important;font-weight:850}
 #exit4-dialog a.exit4-pdf span{color:inherit}
@@ -695,7 +705,11 @@ html{overflow-x:clip}
 <div class="hero-eyebrow"><span class="status-star">✦</span> FROM IDEA TO PLAY <span class="eyebrow-line"></span> PORTFOLIO 2026</div>
 <h1 id="hero-title">재미를 고민하고,<br/><em>경험을 설계하는</em><br/>게임 기획자<span class="title-period">.</span></h1>
 <p class="hero-intro">안녕하세요, <strong>서예종</strong>입니다.<br/>플레이어의 시작부터 탈출까지, 왜 그 장소에 적과 사건을 배치했는지 설명할 수 있는 기획을 지향합니다.</p>
-<div class="hero-actions"><a class="primary-button" href="#projects">프로젝트 둘러보기 <span aria-hidden="true">↗</span></a><a class="text-button" href="#about">저에 대해 알아보기 <span aria-hidden="true">↓</span></a></div>
+<div class="hero-actions">
+<a class="primary-button" href="#projects">프로젝트 둘러보기 <span aria-hidden="true">↗</span></a>
+<a class="hero-profile-link" href="https://drive.google.com/file/d/1sksk0Ubz4SfyCcEsARPybBlHBMCvkO2S/view?usp=sharing" target="_blank" rel="noopener noreferrer">소개 문서 보기 <span aria-hidden="true">↗</span></a>
+<a class="text-button" href="#about">저에 대해 알아보기 <span aria-hidden="true">↓</span></a>
+</div>
 <div class="draft-marker"><span class="draft-dot"></span> GAME DESIGN · CONTENT · LEVEL · QA</div>
 </div>
 <div class="hero-art alwayseo-hero-art reveal"><img class="alwayseo-profile-art" src="assets/alwayseo-profile.png" alt="Alwayseo 프로필 로고: 노을과 별빛 아래 노트북으로 작업하며 종이비행기를 바라보는 모습" width="1024" height="1024" fetchpriority="high"/></div>
@@ -715,18 +729,18 @@ html{overflow-x:clip}
 <div class="section-side reveal"><span class="section-index">01 — ABOUT ME</span><div class="deco-sparkle">✳</div></div>
 <div class="about-main reveal">
 <div class="section-heading-top"><span class="mini-pill">HELLO, NICE TO MEET YOU!</span><span class="soft-star">✧</span></div>
-<h2 class="section-heading" id="about-title">게임을 <span>생각하는 시간</span>이<br/>즐거운 사람입니다.</h2>
-<p class="section-lead">작은 규칙이 플레이어의 행동을 어떻게 바꾸는지 관찰하고, 콘텐츠와 동선 속에 학습의 순서를 설계하는 데 관심이 있습니다. 프로젝트에서 기획 의도와 실제 동작을 비교하고 수정한 과정을 기록해 왔습니다.</p>
-<div class="about-tag-row"><span>WHY를 질문하는 기획</span><span>경험 중심의 설계</span><span>기록하고 개선하는 과정</span></div><div aria-label="기본 프로필" class="profile-stats">
+<h2 class="section-heading" id="about-title">생각한 재미를 <span>직접 플레이로</span><br/>확인하는 기획자입니다.</h2>
+<p class="section-lead">모바일 게임과 앱을 직접 출시하면서, 머릿속으로 구상한 장면이 실제로 움직이는 재미를 알게 됐습니다. 안과 외래에서 처음 온 환자에게 안내하는 방식을 다르게 했던 경험은 기획할 때도 ‘처음 보는 사람은 어떻게 받아들일까?’를 먼저 생각하게 합니다. Roblox에서는 안내선을 줄여 탐험할 여지를 만들었고, Unity에서는 시작부터 다시 도전까지 이어지는 흐름을 먼저 완성했습니다.</p>
+<div class="about-tag-row"><span>처음 온 플레이어의 시선</span><span>직접 플레이하며 검증</span><span>수정 이유를 기록</span></div><div aria-label="기본 프로필" class="profile-stats">
 <div><span>NAME</span><strong>서예종 <small>SEO YEJONG</small></strong></div>
 <div><span>EDUCATION</span><strong>한국성서대학교 간호학과 <small>2026.02 졸업</small></strong></div>
-<div><span>DESIGN FOCUS</span><strong>Level · Quest · Boss<small>Playtest · Design Notes</small></strong></div>
+<div><span>DESIGN FOCUS</span><strong>콘텐츠 기획<small>레벨 · 이벤트 · 플레이테스트</small></strong></div>
 </div>
-<div class="quote-block"><span class="quote-icon">“</span><p>게임의 재미를 말로만 설명하기보다,<br/>직접 플레이하고 판단할 수 있는 구조로 남기고 싶습니다.</p><span class="quote-foot">MY DESIGN PHILOSOPHY</span></div>
+<div class="quote-block"><span class="quote-icon">“</span><p>처음 온 플레이어도 길을 잃지 않고,<br/>‘다음엔 뭘 해 볼까?’ 기대하는 게임을 만들고 싶습니다.</p><span class="quote-foot">MY DESIGN PHILOSOPHY</span></div>
 <div aria-label="기획을 바라보는 세 가지 관점" class="about-principles">
-<div><span>01</span><strong>질문하기</strong><small>왜 재미있는가?</small></div>
-<div><span>02</span><strong>구체화하기</strong><small>어떻게 플레이하는가?</small></div>
-<div><span>03</span><strong>확인하기</strong><small>실제로 전달되는가?</small></div>
+<div><span>01</span><strong>끝까지 완성하기</strong><small>핵심 흐름부터 만들기</small></div>
+<div><span>02</span><strong>플레이로 확인하기</strong><small>어디가 왜 어색한지 살피기</small></div>
+<div><span>03</span><strong>기록 남기기</strong><small>무엇을 왜 바꿨는지 적기</small></div>
 </div>
 </div>
 </div>
